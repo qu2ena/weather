@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Weather</title>
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+	<div class="header">
+		<span class="error">
+			Input something and try submitting again.
+		</span>
+		<input type="text" class="search-key" placeholder="Your city name"> 
+		<button class="search-btn">search</button>
+	</div>
+	<div class="main">
+		<h1 class="title">Current weather and forecasts in your city</h1>
+		<div class="container">
+			<div class="weather">
+				<div class="city">Weather in {{value.name}}, {{value.sys.country}}</div>
+				<div class="temp">
+					<img class="picture" v-bind:src="value.weather[0].icon">
+					<span>{{value.main.temp}} °C</span>
+				</div>
+				<span class="description">{{value.weather[0].description}}</span>
+				<span class="time">get at {{value.dt}}</span>
+				<table class="weather-info">
+					<tr>
+						<td>Wind</td>
+						<td id="weather-wind">
+							<p class="wind-speed">{{value.wind.speed}}</p>
+							<p class="wind-deg">{{value.wind.deg}}</p>
+						</td>
+					</tr>
+					<tr>
+						<td>Cloudiness</td>
+						<td id="weather-cloudiness">{{value.clouds.all}}</td>
+					</tr>
+					<tr>
+						<td>Pressure</td>
+						<td id="weather-pressure">{{value.main.pressure}} hpa</td>
+					</tr>
+					<tr>
+						<td>Humidity</td>
+						<td id="weather-humidity">{{value.main.humidity}}%</td>
+					</tr>	
+					<tr>
+						<td>Sunrise</td>
+						<td id="weather-sunrise">{{value.sys.sunrise}}</td>
+					</tr>
+					<tr>
+						<td>Sunset</td>
+						<td id="weather-sunset">{{value.sys.sunset}}</td>
+					</tr>
+					<tr>
+						<td>Geo coords</td>
+						<td id="weather-geo"><a href="##">{{value.coord}}</a></td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="forecasts">
+				<button type="button" class="normal highlight" id="daily">Daily</button>
+				<button type="button" class="normal" id="hourly">Hourly</button>
+				<h2>Weather forecasts</h2>
+				<div class="forecast-content">
+					<div class="content-daily active">
+						<table class="daily-forecast">
+							<tr v-for="item in daily">
+								<td class="daily-date">{{item.dt}}
+									<img v-bind:src="item.weather[0].icon">
+								</td>
+								<td class="daily-weather-info">
+									<div class="daily-top">
+										<span class="orange-bg" v-bind:class="{'blue-bg': item.isUnderZero}">{{item.temp.day}} °C</span>
+										<span class="gray-bg">{{item.temp.night}} °C</span> 
+										<i>{{item.weather[0].description}}</i>
+									</div>
+									<div class="daily-middle">{{item.speed}}m/s</div> 
+									<div class="daily-bottom">clouds: {{item.clouds}}% , {{item.pressure}} hpa
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+					
+					<div class="content-hourly">
+						<table class="hourly-forecast"  v-for="item in hourly.list">
+							<tr>
+								<td colspan="2" class="special-row">{{item.date}} 
+									<span v-if="isToday">Today</span></td>
+								</tr>
+								<tr v-for="value in item.value">
+									<td class="hourly-date">{{value.dt}}
+										<img v-bind:src="value.weather[0].icon">
+									</td> 
+									<td class="hourly-weather-info">
+										<div class="hourly-top"> 
+											<span class="gray-bg">{{value.main.temp}} °C</span>
+											<i>{{value.weather[0].description}}</i>
+										</div>
+										<div class="hourly-bottom">
+											{{value.main.temp_min}} {{value.main.temp_max}} °C {{value.wind.speed}} m/s. {{value.clouds.all}}%, {{value.main.pressure}} hpa
+										</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/vue/2.1.0/vue.min.js"></script>
+		<script src="js/js.cookie.js"></script>
+		<script src="js/weather.js"></script>
+	</body>
+	</html>
